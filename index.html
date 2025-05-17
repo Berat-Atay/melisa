@@ -1,0 +1,64 @@
+
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Berat ♥ Melisa</title>
+<link href="https://fonts.googleapis.com/css2?family=Great+Vibes&family=Poppins:wght@300;500;700&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+<link rel="stylesheet" href="css/style.css">
+</head>
+<body class="landing">
+<canvas id="bgCanvas"></canvas>
+<main class="hero">
+  <h1 class="logo">Berat <span>♥</span> Melisa</h1>
+  <input id="passwordInput" type="password" placeholder="Şifre" class="password-input">
+  <button class="btn" onclick="login()">Giriş Yap</button>
+  <p id="loginError" class="error"></p>
+</main>
+<audio id="bgMusic" loop preload="auto" src="assets/music.mp3"></audio>
+<footer>© 2025</footer>
+<script>
+function login(){
+  const pass=document.getElementById('passwordInput').value;
+  if(pass==='melisa'){
+    localStorage.setItem('loggedIn','true');
+    window.location='memories.html';
+  }else{
+    document.getElementById('loginError').innerText='Yanlış şifre 😢';
+  }
+}
+if(localStorage.getItem('loggedIn')==='true'){
+  window.location='memories.html';
+}
+
+// small moving gradient bubbles on canvas
+const canvas=document.getElementById('bgCanvas');
+const ctx=canvas.getContext('2d');
+let w,h,particles=[];
+function resize(){w=canvas.width=window.innerWidth;h=canvas.height=window.innerHeight;}
+window.addEventListener('resize',resize);resize();
+
+for(let i=0;i<30;i++){
+ particles.push({x:Math.random()*w,y:Math.random()*h,r:40+Math.random()*40,dx:-1+Math.random()*2,dy:-1+Math.random()*2});
+}
+function draw(){
+ ctx.clearRect(0,0,w,h);
+ particles.forEach(p=>{
+   ctx.beginPath();
+   const grad=ctx.createRadialGradient(p.x,p.y,0,p.x,p.y,p.r);
+   grad.addColorStop(0,'rgba(255,255,255,0.15)');
+   grad.addColorStop(1,'rgba(255,255,255,0)');
+   ctx.fillStyle=grad;
+   ctx.arc(p.x,p.y,p.r,0,Math.PI*2);ctx.fill();
+   p.x+=p.dx;p.y+=p.dy;
+   if(p.x<0||p.x>w)p.dx*=-1;
+   if(p.y<0||p.y>h)p.dy*=-1;
+ });
+ requestAnimationFrame(draw);
+}
+draw();
+</script>
+</body>
+</html>
